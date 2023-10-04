@@ -2,6 +2,7 @@ package tn.esprit.myfirstproject.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 
@@ -11,18 +12,20 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Universite implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUniversite;
+    @Setter(AccessLevel.NONE)
+    Long idUniversite;
 
-    private String nomUniversite;
-    private String adresse;
+    String nomUniversite;
+    String adresse;
 
 
     @OneToOne
     @JoinColumn(name = "idFoyer")
-    private Foyer foyer;
+    Foyer foyer;
 
 }

@@ -2,6 +2,7 @@ package tn.esprit.myfirstproject.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -14,17 +15,21 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation implements Serializable {
 
     @Id
-    private String idReservation;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
+    Long idReservation;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date anneeUniversiaire;
+    Date anneeUniversiaire;
 
-    private boolean estValide;
+    boolean estValide;
+
 
     @ManyToMany
-    private Set<Etudiant> etudiants;
+    Set<Etudiant> etudiants;
 
 }

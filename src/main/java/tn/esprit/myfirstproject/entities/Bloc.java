@@ -2,6 +2,7 @@ package tn.esprit.myfirstproject.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,21 +13,23 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Bloc implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idBloc;
+    @Setter(AccessLevel.NONE)
+    Long idBloc;
 
-    private String nomBloc;
-    private Long capaciteBloc;
+    String nomBloc;
+    Long capaciteBloc;
 
 
     @ManyToOne
     @JoinColumn(name = "idFoyer")
-    private Foyer foyer;
+    Foyer foyer;
 
     @OneToMany(mappedBy = "bloc")
-    private Set<Chambre> chambres;
+    Set<Chambre> chambres;
 
 }
