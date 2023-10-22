@@ -1,5 +1,6 @@
 package tn.esprit.myfirstproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,13 +13,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Bloc implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     Long idBloc;
 
     String nomBloc;
@@ -30,6 +29,7 @@ public class Bloc implements Serializable {
     Foyer foyer;
 
     @OneToMany(mappedBy = "bloc")
+    @JsonIgnore
     Set<Chambre> chambres;
 
 }
