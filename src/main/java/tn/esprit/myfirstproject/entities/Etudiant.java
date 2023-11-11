@@ -7,7 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -24,11 +24,14 @@ public class Etudiant implements Serializable {
 
     String nomEt;
     String prenomEt;
+
+    @Column(unique=true)
     Long cin;
+
     String ecole;
 
-    @JsonFormat(pattern="dd-MM-yyyy")
-    Date dateNaissance;
+    @Temporal(TemporalType.DATE)
+    LocalDate dateNaissance;
 
 
     @ManyToMany(mappedBy="etudiants")

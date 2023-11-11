@@ -17,7 +17,12 @@ public class FoyerController {
 
     @PostMapping("/add")
     public Foyer addFoyer(@RequestBody Foyer foyer) {
-        return foyerService.addFoyer(foyer);
+        return foyerService.ajouterFoyer(foyer);
+    }
+
+    @PostMapping("/add/{idUniversite}")
+    public Foyer ajouterFoyerEtAffecterAUniversite(@RequestBody Foyer foyer, @PathVariable Long idUniversite) {
+        return foyerService.ajouterFoyerEtAffecterAUniversite(foyer, idUniversite);
     }
 
     @PutMapping("/update")

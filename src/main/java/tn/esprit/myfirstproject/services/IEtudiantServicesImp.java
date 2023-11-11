@@ -1,15 +1,15 @@
 package tn.esprit.myfirstproject.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.myfirstproject.entities.Etudiant;
-import tn.esprit.myfirstproject.entities.Foyer;
 import tn.esprit.myfirstproject.repositories.IEtudiantRepository;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class IEtudiantServicesImp implements IEtudiantServices {
 
@@ -17,37 +17,13 @@ public class IEtudiantServicesImp implements IEtudiantServices {
 
 
     @Override
-    public Etudiant addEtudiant(Etudiant etudiant) {
-        return etudiantRepository.save(etudiant);
+    public List<Etudiant> addEtudiant(List<Etudiant> etudiants) {
+        return etudiantRepository.saveAll(etudiants);
     }
 
     @Override
     public Etudiant updateEtudiant(Etudiant etudiant) {
-        if (etudiant.getIdEtudiant() != null) {
-            Etudiant existingEtudiant = etudiantRepository.findById(etudiant.getIdEtudiant()).orElse(null);
-            if (existingEtudiant != null) {
-                if (etudiant.getNomEt() != null) {
-                    existingEtudiant.setNomEt(etudiant.getNomEt());
-                }
-                if (etudiant.getPrenomEt() != null) {
-                    existingEtudiant.setPrenomEt(etudiant.getPrenomEt());
-                }
-                if (etudiant.getCin() != null) {
-                    existingEtudiant.setCin(etudiant.getCin());
-                }
-                if (etudiant.getDateNaissance() != null) {
-                    existingEtudiant.setDateNaissance(etudiant.getDateNaissance());
-                }
-                if (etudiant.getEcole() != null) {
-                    existingEtudiant.setEcole(etudiant.getEcole());
-                }
-                if (etudiant.getReservations() != null) {
-                    existingEtudiant.setReservations(etudiant.getReservations());
-                }
-                return etudiantRepository.save(existingEtudiant);
-            }
-        }
-        return null;
+        return etudiantRepository.save(etudiant);
     }
 
     @Override

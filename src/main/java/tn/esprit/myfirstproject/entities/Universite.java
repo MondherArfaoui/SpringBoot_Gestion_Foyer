@@ -1,5 +1,6 @@
 package tn.esprit.myfirstproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,12 +19,15 @@ public class Universite implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idUniversite;
 
+    @Column(name="nomUniversite", unique=true)
     String nomUniversite;
+
     String adresse;
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idFoyer")
+    @JsonIgnore
     Foyer foyer;
 
 }

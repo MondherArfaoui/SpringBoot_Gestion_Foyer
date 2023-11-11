@@ -28,8 +28,7 @@ public class Foyer implements Serializable {
     @JsonIgnore
     Universite universite;
 
-    @OneToMany(mappedBy = "foyer")
-    @JsonIgnore
+    @OneToMany(mappedBy = "foyer", cascade={CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     Set<Bloc> blocs;
 
 }

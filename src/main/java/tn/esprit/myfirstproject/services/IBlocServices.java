@@ -10,4 +10,7 @@ public interface IBlocServices {
     List<Bloc> getAllBlocs();
     Bloc getBlocById(Long idBloc);
     void deleteBloc(Long idBloc);
+
+    Bloc affecterChambresABloc(List<Long> idChambre, Long idBloc);
+    Bloc affecterBlocAFoyer(Long idBloc, Long idFoyer) ;
 }

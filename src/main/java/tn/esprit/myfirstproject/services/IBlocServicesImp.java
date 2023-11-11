@@ -1,19 +1,25 @@
 package tn.esprit.myfirstproject.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.myfirstproject.entities.Bloc;
-import tn.esprit.myfirstproject.entities.Universite;
+import tn.esprit.myfirstproject.entities.Chambre;
+import tn.esprit.myfirstproject.entities.Foyer;
 import tn.esprit.myfirstproject.repositories.IBlocRepository;
+import tn.esprit.myfirstproject.repositories.IChambreRepository;
+import tn.esprit.myfirstproject.repositories.IFoyerRepository;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class IBlocServicesImp implements IBlocServices {
 
     private final IBlocRepository blocRepository;
+    private final IChambreRepository chambreRepository;
+    private final IFoyerRepository foyerRepository;
 
 
     @Override
@@ -23,25 +29,7 @@ public class IBlocServicesImp implements IBlocServices {
 
     @Override
     public Bloc updateBloc(Bloc bloc) {
-        if (bloc.getIdBloc() != null) {
-            Bloc existingBloc = blocRepository.findById(bloc.getIdBloc()).orElse(null);
-            if (existingBloc != null) {
-                if (bloc.getNomBloc() != null) {
-                    existingBloc.setNomBloc(bloc.getNomBloc());
-                }
-                if (bloc.getCapaciteBloc() != null) {
-                    existingBloc.setCapaciteBloc(bloc.getCapaciteBloc());
-                }
-                if (bloc.getFoyer() != null) {
-                    existingBloc.setFoyer(bloc.getFoyer());
-                }
-                if (bloc.getChambres() != null) {
-                    existingBloc.setChambres(bloc.getChambres());
-                }
-                return blocRepository.save(existingBloc);
-            }
-        }
-        return null;
+        return blocRepository.save(bloc);
     }
 
     @Override
@@ -57,5 +45,31 @@ public class IBlocServicesImp implements IBlocServices {
     @Override
     public void deleteBloc(Long idBloc) {
         blocRepository.deleteById(idBloc);
+    }
+
+
+    @Override
+    public Bloc affecterChambresABloc(List<Long> idChambre, Long idBloc) {
+        Bloc bloc = blocRepository.findById(idBloc).orElse(null);
+
+        for(Long id:idChambre){
+            Chambre chambre = chambreRepository.findById(id).orElse(null);
+            chambre.setBloc(bloc);
+            chambreRepository.save(chambre);
+        }
+
+        return blocRepository.save(bloc);
+    }
+
+    @Override
+    public Bloc affecterBlocAFoyer(Long idBloc, Long idFoyer) {
+        Bloc bloc = blocRepository.findById(idBloc).orElse(null);
+
+        Foyer foyer = foyerRepository.findById(idFoyer).orElse(null);
+
+        bloc.setFoyer(foyer);
+        blocRepository.save(bloc);
+
+        return bloc;
     }
 }

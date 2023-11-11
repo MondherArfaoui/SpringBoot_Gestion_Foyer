@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.myfirstproject.entities.Chambre;
+import tn.esprit.myfirstproject.entities.TypeChambre;
 import tn.esprit.myfirstproject.services.IChambreServices;
 
 import java.util.List;
@@ -35,8 +36,9 @@ public class ChambreController {
         return chambreService.getChambreById(idChambre);
     }
 
-    @DeleteMapping("/delete/{idChambre}")
-    public void deleteChambre(@PathVariable Long idChambre) {
-        chambreService.deleteChambre(idChambre);
+
+    @GetMapping("/getChambresParBlocEtType/{idBloc}/{typeC}")
+    public List<Chambre> getChambresParBlocEtType(@PathVariable Long idBloc, @PathVariable TypeChambre typeC) {
+        return chambreService.getChambresParBlocEtType(idBloc, typeC);
     }
 }

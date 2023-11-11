@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.myfirstproject.entities.Reservation;
 import tn.esprit.myfirstproject.services.IReservationServices;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -15,10 +17,6 @@ public class ReservationController {
 
     private final IReservationServices reservationService;
 
-    @PostMapping("/add")
-    public Reservation addReservation(@RequestBody Reservation reservation) {
-        return reservationService.addReservation(reservation);
-    }
 
     @PutMapping("/update")
     public Reservation updateReservation(@RequestBody Reservation reservation) {
@@ -31,12 +29,18 @@ public class ReservationController {
     }
 
     @GetMapping("/{idReservation}")
-    public Reservation getReservationById(@PathVariable Long idReservation) {
+    public Reservation getReservationById(@PathVariable String idReservation) {
         return reservationService.getReservationById(idReservation);
     }
 
-    @DeleteMapping("/delete/{idReservation}")
-    public void deleteReservation(@PathVariable Long idReservation) {
-        reservationService.deleteReservation(idReservation);
+
+    @PostMapping("/add/{idChambre}/{cin}")
+    public Reservation ajouterReservation(@PathVariable Long idChambre, @PathVariable Long cin) {
+        return reservationService.ajouterReservation(idChambre, cin);
+    }
+
+    @PutMapping("/annulerReservation/{cin}")
+    public Reservation annulerReservation(@PathVariable Long cin) {
+        return reservationService.annulerReservation(cin);
     }
 }
