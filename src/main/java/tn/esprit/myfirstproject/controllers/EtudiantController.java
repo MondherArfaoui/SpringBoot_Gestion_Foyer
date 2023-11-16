@@ -16,8 +16,8 @@ public class EtudiantController {
     private final IEtudiantServices etudiantService;
 
     @PostMapping("/add")
-    public List<Etudiant> addEtudiants(@RequestBody List<Etudiant> etudiants) {
-        return etudiantService.addEtudiant(etudiants);
+    public Etudiant addEtudiant(@RequestBody Etudiant etudiant) {
+        return etudiantService.addEtudiant(etudiant);
     }
 
     @PutMapping("/update")

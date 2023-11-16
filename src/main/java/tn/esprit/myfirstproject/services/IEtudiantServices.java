@@ -5,7 +5,7 @@ import tn.esprit.myfirstproject.entities.Etudiant;
 import java.util.List;
 
 public interface IEtudiantServices {
-    List<Etudiant> addEtudiant(List<Etudiant> etudiants);
+    Etudiant addEtudiant(Etudiant etudiant);
     Etudiant updateEtudiant(Etudiant etudiant);
     List<Etudiant> getAllEtudiants();
     Etudiant getEtudiantById(Long idEtudiant);

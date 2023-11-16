@@ -17,8 +17,8 @@ public class IEtudiantServicesImp implements IEtudiantServices {
 
 
     @Override
-    public List<Etudiant> addEtudiant(List<Etudiant> etudiants) {
-        return etudiantRepository.saveAll(etudiants);
+    public Etudiant addEtudiant(Etudiant etudiant) {
+        return etudiantRepository.save(etudiant);
     }
 
     @Override

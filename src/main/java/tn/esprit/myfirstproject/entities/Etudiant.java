@@ -1,6 +1,5 @@
 package tn.esprit.myfirstproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,14 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Etudiant implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idEtudiant;
-
-    String nomEt;
-    String prenomEt;
+public class Etudiant extends User {
 
     @Column(unique=true)
     Long cin;
