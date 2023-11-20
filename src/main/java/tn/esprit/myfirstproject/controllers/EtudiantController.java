@@ -9,6 +9,7 @@ import tn.esprit.myfirstproject.services.IEtudiantServices;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/etudiant")
 @RequiredArgsConstructor
 public class EtudiantController {

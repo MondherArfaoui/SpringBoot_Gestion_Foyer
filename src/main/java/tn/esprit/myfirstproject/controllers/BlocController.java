@@ -9,6 +9,7 @@ import tn.esprit.myfirstproject.services.IBlocServices;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/bloc")
 @RequiredArgsConstructor
 public class BlocController {

@@ -13,8 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Reservation implements Serializable {
+@FieldDefaults(level = AccessLevel.PRIVATEimplements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

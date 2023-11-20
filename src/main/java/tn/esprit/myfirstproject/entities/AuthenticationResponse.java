@@ -12,5 +12,6 @@ public class AuthenticationResponse {
 
   String accessToken;
   String refreshToken;
+  User userDetails;
 
 }

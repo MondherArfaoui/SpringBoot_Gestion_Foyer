@@ -40,7 +40,43 @@ public class IAuthenticationServicesImp implements IAuthenticationServices {
 
         authenticationResponse.setAccessToken(jwt);
         authenticationResponse.setRefreshToken(refreshToken);
+
+        if (user.getRole() == Role.ETUDIANT) {
+            Etudiant etudiant = (Etudiant) user;
+            Etudiant etudiantDto = convertToEtudiantDto(etudiant);
+            authenticationResponse.setUserDetails(etudiantDto);
+        } else {
+            User userDetails = convertToUserDto(user);
+            authenticationResponse.setUserDetails(userDetails);
+        }
+
         return authenticationResponse;
+    }
+
+    private User convertToUserDto(User user) {
+        User dto = new User();
+        dto.setId(user.getId());
+        dto.setNom(user.getNom());
+        dto.setPrenom(user.getPrenom());
+        dto.setImage(user.getImage());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setRole(user.getRole());
+        return dto;
+    }
+    private Etudiant convertToEtudiantDto(Etudiant etudiant) {
+        Etudiant dto = new Etudiant();
+        dto.setId(etudiant.getId());
+        dto.setNom(etudiant.getNom());
+        dto.setPrenom(etudiant.getPrenom());
+        dto.setImage(etudiant.getImage());
+        dto.setEmail(etudiant.getEmail());
+        dto.setPassword(etudiant.getPassword());
+        dto.setRole(etudiant.getRole());
+        dto.setCin(etudiant.getCin());
+        dto.setEcole(etudiant.getEcole());
+        dto.setDateNaissance(etudiant.getDateNaissance());
+        return dto;
     }
 
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshToken) {

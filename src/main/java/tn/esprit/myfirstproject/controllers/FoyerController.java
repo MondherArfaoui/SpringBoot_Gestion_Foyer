@@ -9,6 +9,7 @@ import tn.esprit.myfirstproject.services.IFoyerServices;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/foyer")
 @RequiredArgsConstructor
 public class FoyerController {

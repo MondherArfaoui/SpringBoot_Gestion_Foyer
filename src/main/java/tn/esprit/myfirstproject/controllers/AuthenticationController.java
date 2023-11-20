@@ -1,10 +1,7 @@
 package tn.esprit.myfirstproject.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esprit.myfirstproject.entities.AuthenticationResponse;
 import tn.esprit.myfirstproject.entities.Etudiant;
 import tn.esprit.myfirstproject.entities.RefreshTokenRequest;
@@ -12,6 +9,7 @@ import tn.esprit.myfirstproject.entities.User;
 import tn.esprit.myfirstproject.services.IAuthenticationServices;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
@@ -23,13 +21,13 @@ public class AuthenticationController {
     return authenticationServices.registerEtudiant(etudiant);
   }
 
-    @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody User user) {
-        return authenticationServices.login(user.getEmail(), user.getPassword());
-    }
+  @PostMapping("/login")
+  public AuthenticationResponse login(@RequestBody User user) {
+      return authenticationServices.login(user.getEmail(), user.getPassword());
+  }
 
-    @PostMapping("/refreshToken")
-    public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest refreshToken) {
-        return authenticationServices.refreshToken(refreshToken);
-    }
+  @PostMapping("/refreshToken")
+  public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest refreshToken) {
+      return authenticationServices.refreshToken(refreshToken);
+  }
 }

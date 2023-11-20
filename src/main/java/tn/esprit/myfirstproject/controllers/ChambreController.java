@@ -10,6 +10,7 @@ import tn.esprit.myfirstproject.services.IChambreServices;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/chambre")
 @RequiredArgsConstructor
 public class ChambreController {
