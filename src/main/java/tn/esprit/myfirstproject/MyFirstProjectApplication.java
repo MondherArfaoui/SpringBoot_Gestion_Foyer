@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import tn.esprit.myfirstproject.entities.Admin;
 import tn.esprit.myfirstproject.entities.Role;
@@ -13,6 +14,7 @@ import tn.esprit.myfirstproject.repositories.IUserRepository;
 
 @RequiredArgsConstructor
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class MyFirstProjectApplication implements CommandLineRunner {
 
 	private final IUserRepository userRepository;

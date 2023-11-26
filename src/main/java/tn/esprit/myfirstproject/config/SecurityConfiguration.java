@@ -15,11 +15,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tn.esprit.myfirstproject.entities.Role;
 import tn.esprit.myfirstproject.services.IUserServices;
 
+import java.util.Arrays;
 
-import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -34,25 +37,33 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configuration CORS
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/**")
-                                .permitAll()
-                                .requestMatchers("/**").hasAnyRole(Role.ADMIN.name(), Role.ETUDIANT.name())
-                                .anyRequest()
-                                .authenticated()
+                        req
+                                //.requestMatchers("/auth/**").permitAll() // Autoriser les requêtes à /auth/**
+                                .requestMatchers("/**").permitAll() // Autoriser les requêtes à /auth/**
+                                //.requestMatchers("/**").hasAnyRole(Role.ADMIN.name(), Role.ETUDIANT.name())
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .logout(logout ->
-//                        logout.logoutUrl("/auth/logout")
-//                                .addLogoutHandler(logoutHandler())
-//                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-//                )
         ;
 
         return http.build();
+    }
+
+    private CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Autoriser le frontend Angular
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
@@ -72,9 +83,4 @@ public class SecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-//    @Bean
-//    public LogoutHandler logoutHandler() {
-//        return (request, response, authentication) -> SecurityContextHolder.clearContext();
-//    }
 }

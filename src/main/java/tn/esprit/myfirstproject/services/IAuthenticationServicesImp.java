@@ -4,14 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import tn.esprit.myfirstproject.config.EmailService;
 import tn.esprit.myfirstproject.entities.*;
 import tn.esprit.myfirstproject.repositories.IEtudiantRepository;
 import tn.esprit.myfirstproject.repositories.IUserRepository;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -23,6 +28,7 @@ public class IAuthenticationServicesImp implements IAuthenticationServices {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final IJWTServices jwtServices;
+    private final EmailService emailService;
 
     public Etudiant registerEtudiant(Etudiant etudiant) {
         etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
@@ -92,5 +98,44 @@ public class IAuthenticationServicesImp implements IAuthenticationServices {
             return authenticationResponse;
         }
         return null;
+    }
+
+    @Override
+    public HashMap<String, String> forgetPassword(String email) {
+        HashMap message = new HashMap();
+
+        User userexisting = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        UUID token = UUID.randomUUID();
+        userexisting.setPasswordResetToken(token.toString());
+        userexisting.setId(userexisting.getId());
+
+        Mail mail = new Mail();
+
+        mail.setSubject("Reset Password");
+        mail.setTo(userexisting.getEmail());
+        mail.setContent("Votre nouveau TOKEN est : " + "http://localhost:4200/resetpassword/"+userexisting.getPasswordResetToken());
+        emailService.sendSimpleEmail(mail);
+        userRepository.save(userexisting);
+        message.put("user","user FOUND and email is Sent");
+        return message;
+    }
+
+    @Override
+    public HashMap<String,String> resetPassword(@PathVariable String passwordResetToken, String newPassword){
+        User userexisting = userRepository.findByPasswordResetToken(passwordResetToken).orElseThrow(() -> new RuntimeException("User not found"));
+        HashMap message = new HashMap();
+        if (userexisting != null) {
+            userexisting.setId(userexisting.getId());
+            userexisting.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userexisting.setPasswordResetToken(null);
+            userRepository.save(userexisting);
+            message.put("resetpassword","succès");
+            return message;
+        }else
+        {
+            message.put("resetpassword","Échoué ");
+            return message;
+        }
     }
 }

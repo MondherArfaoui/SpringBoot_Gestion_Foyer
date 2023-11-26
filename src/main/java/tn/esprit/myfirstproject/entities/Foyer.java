@@ -25,7 +25,6 @@ public class Foyer implements Serializable {
 
 
     @OneToOne(mappedBy = "foyer")
-    @JsonIgnore
     Universite universite;
 
     @OneToMany(mappedBy = "foyer", cascade={CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)

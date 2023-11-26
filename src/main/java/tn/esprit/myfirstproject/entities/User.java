@@ -1,5 +1,6 @@
 package tn.esprit.myfirstproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -36,7 +37,9 @@ public class User implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
+    String passwordResetToken;
 
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
