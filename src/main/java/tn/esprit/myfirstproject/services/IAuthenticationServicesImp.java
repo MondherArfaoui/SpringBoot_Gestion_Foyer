@@ -80,7 +80,7 @@ public class IAuthenticationServicesImp implements IAuthenticationServices {
         dto.setPassword(etudiant.getPassword());
         dto.setRole(etudiant.getRole());
         dto.setCin(etudiant.getCin());
-        dto.setEcole(etudiant.getEcole());
+        dto.setUniversite(etudiant.getUniversite());
         dto.setDateNaissance(etudiant.getDateNaissance());
         return dto;
     }

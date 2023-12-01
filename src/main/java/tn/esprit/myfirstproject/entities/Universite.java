@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,4 +31,7 @@ public class Universite implements Serializable {
     @JsonIgnore
     Foyer foyer;
 
+    @OneToMany(mappedBy = "universite")
+    @JsonIgnore
+    Set<Etudiant> etudiants;
 }

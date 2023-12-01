@@ -30,8 +30,13 @@ public class ReservationController {
     }
 
     @GetMapping("/{idReservation}")
-    public Reservation getReservationById(@PathVariable String idReservation) {
+    public Reservation getReservationById(@PathVariable Long idReservation) {
         return reservationService.getReservationById(idReservation);
+    }
+
+    @GetMapping("/getReservationsByEtudiantId/{idEtudiant}")
+    public Reservation getReservationsByEtudiantId(@PathVariable Long idEtudiant) {
+        return reservationService.getCurrentReservationByEtudiantId(idEtudiant);
     }
 
 

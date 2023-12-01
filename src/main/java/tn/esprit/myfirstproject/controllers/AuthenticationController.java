@@ -7,10 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tn.esprit.myfirstproject.entities.AuthenticationResponse;
-import tn.esprit.myfirstproject.entities.Etudiant;
-import tn.esprit.myfirstproject.entities.RefreshTokenRequest;
-import tn.esprit.myfirstproject.entities.User;
+import tn.esprit.myfirstproject.entities.*;
 import tn.esprit.myfirstproject.services.IAuthenticationServices;
 
 import java.io.IOException;
@@ -38,7 +35,7 @@ public class AuthenticationController {
                                                    @RequestParam("email") String email,
                                                    @RequestParam("password") String password,
                                                    @RequestParam("cin") Long cin,
-                                                   @RequestParam("ecole") String ecole,
+                                                   @RequestParam("universite") Universite universite,
                                                    @RequestParam("dateNaissance") LocalDate dateNaissance,
                                                    @RequestParam("image") MultipartFile file) throws IOException {
     Etudiant etudiant = new Etudiant();
@@ -47,7 +44,7 @@ public class AuthenticationController {
     etudiant.setEmail(email);
     etudiant.setPassword(password);
     etudiant.setCin(cin);
-    etudiant.setEcole(ecole);
+    etudiant.setUniversite(universite);
     etudiant.setDateNaissance(dateNaissance);
 
     String originalFilename = file.getOriginalFilename();

@@ -20,8 +20,6 @@ public class Etudiant extends User {
     @Column(unique=true)
     Long cin;
 
-    String ecole;
-
     @Temporal(TemporalType.DATE)
     LocalDate dateNaissance;
 
@@ -30,4 +28,7 @@ public class Etudiant extends User {
     @JsonIgnore
     Set<Reservation> reservations;
 
+    @ManyToOne
+    @JoinColumn(name = "idUniversite")
+    Universite universite;
 }

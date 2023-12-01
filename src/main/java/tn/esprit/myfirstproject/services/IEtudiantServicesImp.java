@@ -60,8 +60,8 @@ public class IEtudiantServicesImp implements IEtudiantServices {
                 if (etudiant.getDateNaissance() != null) {
                     existingEtudiant.setDateNaissance(etudiant.getDateNaissance());
                 }
-                if (etudiant.getEcole() != null) {
-                    existingEtudiant.setEcole(etudiant.getEcole());
+                if (etudiant.getUniversite() != null) {
+                    existingEtudiant.setUniversite(etudiant.getUniversite());
                 }
                 if (etudiant.getReservations() != null) {
                     existingEtudiant.setReservations(etudiant.getReservations());

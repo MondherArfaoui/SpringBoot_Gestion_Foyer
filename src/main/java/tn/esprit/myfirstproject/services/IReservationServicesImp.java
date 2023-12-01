@@ -2,6 +2,7 @@ package tn.esprit.myfirstproject.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.myfirstproject.entities.Chambre;
@@ -13,10 +14,7 @@ import tn.esprit.myfirstproject.repositories.IEtudiantRepository;
 import tn.esprit.myfirstproject.repositories.IReservationRepository;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -40,55 +38,73 @@ public class IReservationServicesImp implements IReservationServices {
     }
 
     @Override
-    public Reservation getReservationById(String idReservation) {
+    public Reservation getReservationById(Long idReservation) {
         return reservationRepository.findById(idReservation).orElse(null);
+    }
+
+    @Override
+    public Reservation getCurrentReservationByEtudiantId(Long idEtudiant) {
+        LocalDate currentDate = LocalDate.now();
+        return reservationRepository.getCurrentReservationByEtudiantId(idEtudiant, currentDate);
     }
 
 
     @Override
-    public Reservation ajouterReservation (Long idChambre, Long cin)  {
+    public Reservation ajouterReservation(Long idChambre, Long cin) {
         Chambre chambre = chambreRepository.findById(idChambre).orElse(null);
-
         Etudiant etudiant = etudiantRepository.findByCin(cin);
 
-        // Création de la réservation
-        Reservation reservation = new Reservation();
+        // Assert that the chambre and etudiant are not null
         assert chambre != null;
-        reservation.setNumReservation(chambre.getNumeroChambre() +"-"+ chambre.getBloc().getNomBloc().replace(" ", "") +"-"+ cin);
-        reservation.setDebutAnneeUniv(LocalDate.of(LocalDate.now().getYear(), 9, 1));
-        reservation.setFinAnneeUniv(LocalDate.of(LocalDate.now().getYear() + 1, 6, 1));
-        reservation.setEstValide(true);
+        assert etudiant != null;
 
-        // Déterminer la capacité maximale en fonction du type de chambre
-        int capaciteMax = 0;
-        if (TypeChambre.SIMPLE.equals(chambre.getTypeC())) {
-            capaciteMax = 1;
-        } else if (TypeChambre.DOUBLE.equals(chambre.getTypeC())) {
-            capaciteMax = 2;
-        } else if (TypeChambre.TRIPLE.equals(chambre.getTypeC())) {
-            capaciteMax = 3;
+        // Determine the current academic year
+        LocalDate debutAnnee = LocalDate.of(LocalDate.now().getYear(), 9, 1);
+        LocalDate finAnnee = LocalDate.of(LocalDate.now().getYear() + 1, 6, 1);
+
+        // Check if the etudiant already has a reservation for the current academic year
+        boolean hasExistingReservation = etudiant.getReservations().stream()
+                .anyMatch(reservation -> reservation.getDebutAnneeUniv().equals(debutAnnee) && reservation.getFinAnneeUniv().equals(finAnnee));
+
+        if (hasExistingReservation) {
+            throw new IllegalStateException("L'étudiant a déjà une réservation pour l'année académique en cours.");
         }
 
-        // Vérifier si la capacité maximale de la chambre est atteinte
+        // Check the maximum capacity of the chambre
+        int capaciteMax = switch (chambre.getTypeC()) {
+            case SIMPLE -> 1;
+            case DOUBLE -> 2;
+            case TRIPLE -> 3;
+        };
+
+        // Verify if the maximum capacity of the chambre is reached
         long nombreReservations = chambre.getReservations().size();
         if (nombreReservations >= capaciteMax) {
             throw new IllegalStateException("La capacité maximale de la chambre est atteinte.");
         }
 
-        // Gérer la relation ManyToMany
+        // Create the reservation
+        Reservation reservation = new Reservation();
+        reservation.setNumReservation(chambre.getNumeroChambre() + "-" + chambre.getBloc().getNomBloc().replace(" ", "") + "-" + cin);
+        reservation.setDebutAnneeUniv(debutAnnee);
+        reservation.setFinAnneeUniv(finAnnee);
+        reservation.setEstValide(true);
+
+        // Handle the ManyToMany relationship
         Set<Etudiant> etudiants = new HashSet<>();
         etudiants.add(etudiant);
         reservation.setEtudiants(etudiants);
 
-        // Sauvegarder la réservation
+        // Save the reservation
         Reservation savedReservation = reservationRepository.save(reservation);
 
-        // Ajouter la réservation à la collection de réservations de la chambre et sauvegarder
+        // Add the reservation to the chambre and save
         chambre.getReservations().add(savedReservation);
         chambreRepository.save(chambre);
 
         return savedReservation;
     }
+
 
     @Override
     @Transactional
@@ -117,5 +133,32 @@ public class IReservationServicesImp implements IReservationServices {
 
         // Sauvegarder les modifications
         return reservationRepository.save(reservation);
+    }
+
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 2 6 *") // À minuit, le 2 juin de chaque année
+    public void annulerToutesLesReservationsAutomatiquement() {
+        List<Reservation> reservationsValides = reservationRepository.findAllByEstValide(true);
+
+        for (Reservation reservation : reservationsValides) {
+            reservation.setEstValide(false); // Marquer la réservation comme invalide
+
+            // Désaffecter les étudiants de la réservation
+            for (Etudiant etudiant : reservation.getEtudiants()) {
+                etudiant.getReservations().remove(reservation);
+            }
+            reservation.getEtudiants().clear();
+
+            // Désaffecter la chambre associée et mettre à jour sa capacité
+            Chambre chambreAssociee = chambreRepository.findByReservationsContains(reservation);
+            if (chambreAssociee != null) {
+                chambreAssociee.getReservations().remove(reservation);
+                chambreRepository.save(chambreAssociee);
+            }
+
+            // Sauvegarder la réservation modifiée
+            reservationRepository.save(reservation);
+        }
     }
 }

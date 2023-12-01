@@ -26,6 +26,11 @@ public class BlocController {
         return blocService.updateBloc(bloc);
     }
 
+    @GetMapping("/getAllBlocsByIdFoyer/{idFoyer}")
+    public List<Bloc> getAllBlocsByIdFoyer(@PathVariable Long idFoyer) {
+        return blocService.getAllBlocsByIdFoyer(idFoyer);
+    }
+
     @GetMapping("/all")
     public List<Bloc> getAllBlocs() {
         return blocService.getAllBlocs();

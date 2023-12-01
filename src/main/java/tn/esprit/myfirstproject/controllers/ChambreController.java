@@ -42,4 +42,9 @@ public class ChambreController {
     public List<Chambre> getChambresParBlocEtType(@PathVariable Long idBloc, @PathVariable TypeChambre typeC) {
         return chambreService.getChambresParBlocEtType(idBloc, typeC);
     }
+
+    @GetMapping("/getNombreChambresParBloc/{idBloc}")
+    public Long getNombreChambresParBloc(@PathVariable Long idBloc) {
+        return chambreService.getNombreChambresParBloc(idBloc);
+    }
 }

@@ -9,7 +9,9 @@ import java.util.List;
 public interface IReservationServices {
     Reservation updateReservation(Reservation reservation);
     List<Reservation> getAllReservations();
-    Reservation getReservationById(String idReservation);
+    Reservation getReservationById(Long idReservation);
+
+    Reservation getCurrentReservationByEtudiantId(Long idEtudiant);
 
     Reservation ajouterReservation (Long idChambre, Long cinEtudiant) ;
     Reservation annulerReservation (Long cinEtudiant) ;

@@ -11,5 +11,8 @@ public interface IFoyerServices {
     Foyer updateFoyer(Foyer foyer);
     List<Foyer> getAllFoyers();
     Foyer getFoyerById(Long idFoyer);
+
+    Foyer getFoyerByIdEtudiant(Long idEtudiant);
+
     void deleteFoyer(Long idFoyer);
 }

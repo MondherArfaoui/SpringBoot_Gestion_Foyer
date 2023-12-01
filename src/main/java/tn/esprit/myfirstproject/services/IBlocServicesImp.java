@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.myfirstproject.entities.Bloc;
 import tn.esprit.myfirstproject.entities.Chambre;
+import tn.esprit.myfirstproject.entities.Etudiant;
 import tn.esprit.myfirstproject.entities.Foyer;
 import tn.esprit.myfirstproject.repositories.IBlocRepository;
 import tn.esprit.myfirstproject.repositories.IChambreRepository;
@@ -29,12 +30,35 @@ public class IBlocServicesImp implements IBlocServices {
 
     @Override
     public Bloc updateBloc(Bloc bloc) {
-        return blocRepository.save(bloc);
+        if (bloc.getIdBloc() != null) {
+            Bloc existingBloc = blocRepository.findById(bloc.getIdBloc()).orElse(null);
+            if (existingBloc != null) {
+                if (bloc.getNomBloc() != null) {
+                    existingBloc.setNomBloc(bloc.getNomBloc());
+                }
+                if (bloc.getCapaciteBloc() != null) {
+                    existingBloc.setCapaciteBloc(bloc.getCapaciteBloc());
+                }
+                if (bloc.getChambres() != null) {
+                    existingBloc.setChambres(bloc.getChambres());
+                }
+                if (bloc.getFoyer() != null) {
+                    existingBloc.setFoyer(bloc.getFoyer());
+                }
+                return blocRepository.save(existingBloc);
+            }
+        }
+        return null;
     }
 
     @Override
     public List<Bloc> getAllBlocs() {
         return blocRepository.findAll();
+    }
+
+    @Override
+    public List<Bloc> getAllBlocsByIdFoyer(Long idFoyer) {
+        return blocRepository.findAllByFoyerId(idFoyer);
     }
 
     @Override

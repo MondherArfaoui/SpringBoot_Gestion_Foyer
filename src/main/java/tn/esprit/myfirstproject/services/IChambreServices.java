@@ -12,4 +12,6 @@ public interface IChambreServices {
     Chambre getChambreById(Long idChambre);
 
     List<Chambre> getChambresParBlocEtType (Long idBloc, TypeChambre typeC) ;
+
+    Long getNombreChambresParBloc(Long idBloc);
 }

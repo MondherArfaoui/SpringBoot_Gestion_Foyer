@@ -10,6 +10,8 @@ public interface IUniversiteServices {
     List<Universite> getAllUniversites();
     Universite getUniversiteById(Long idUniversite);
 
+    Universite getUniversiteByIdEtudiant(Long idEtudiant);
+
     Universite affecterFoyerAUniversite(Long idFoyer, String nomUniversite);
     Universite desaffecterFoyerAUniversite(Long idUniversite);
 }
