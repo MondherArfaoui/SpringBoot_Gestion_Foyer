@@ -51,4 +51,9 @@ public class UniversiteController {
     public Universite desaffecterFoyerAUniversite(@PathVariable Long idUniversite) {
         return universiteService.desaffecterFoyerAUniversite(idUniversite);
     }
+
+    @DeleteMapping("/delete/{idUniversite}")
+    public void deleteUniversiteById(@PathVariable Long idUniversite) {
+        universiteService.deleteUniversiteById(idUniversite);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.myfirstproject.entities.Etudiant;
+import tn.esprit.myfirstproject.entities.TypeChambre;
 import tn.esprit.myfirstproject.repositories.IEtudiantRepository;
 
 import java.io.IOException;
@@ -98,6 +99,11 @@ public class IEtudiantServicesImp implements IEtudiantServices {
         } catch (IOException e) {
             throw new RuntimeException("Error processing file", e);
         }
+    }
+
+    @Override
+    public List<Long> cinEtudiantReservationByTypeC(TypeChambre typeC) {
+        return etudiantRepository.cinEtudiantReservationByTypeC(typeC);
     }
 
     @Override

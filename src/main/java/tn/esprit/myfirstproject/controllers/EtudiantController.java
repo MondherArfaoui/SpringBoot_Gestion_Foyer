@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.myfirstproject.entities.Etudiant;
+import tn.esprit.myfirstproject.entities.TypeChambre;
 import tn.esprit.myfirstproject.services.IEtudiantServices;
 
 import java.io.IOException;
@@ -58,5 +59,10 @@ public class EtudiantController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating image: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/cinEtudiantReservationByTypeC/{typeC}")
+    public List<Long> cinEtudiantReservationByTypeC(@PathVariable TypeChambre typeC) {
+        return etudiantService.cinEtudiantReservationByTypeC(typeC);
     }
 }

@@ -79,5 +79,10 @@ public class IUniversiteServicesImp implements IUniversiteServices {
         return universiteRepository.save(universite);
     }
 
+    @Override
+    public void deleteUniversiteById(Long idUniversite) {
+        universiteRepository.deleteById(idUniversite);
+    }
+
 
 }

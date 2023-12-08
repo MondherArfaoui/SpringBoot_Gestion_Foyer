@@ -36,6 +36,11 @@ public class FoyerController {
         return foyerService.getAllFoyers();
     }
 
+    @GetMapping("/getFoyersWithoutUniversite")
+    public List<Foyer> getFoyersWithoutUniversite() {
+        return foyerService.getFoyersWithoutUniversite();
+    }
+
     @GetMapping("/{idFoyer}")
     public Foyer getFoyerById(@PathVariable Long idFoyer) {
         return foyerService.getFoyerById(idFoyer);
@@ -44,6 +49,11 @@ public class FoyerController {
     @GetMapping("/getFoyerByIdEtudiant/{idEtudiant}")
     public Foyer getFoyerByIdEtudiant(@PathVariable Long idEtudiant) {
         return foyerService.getFoyerByIdEtudiant(idEtudiant);
+    }
+
+    @GetMapping("/getFoyerByIdUniversite/{idUniversite}")
+    public Foyer getFoyerByIdUniversite(@PathVariable Long idUniversite) {
+        return foyerService.getFoyerByIdUniversite(idUniversite);
     }
 
     @DeleteMapping("/delete/{idFoyer}")

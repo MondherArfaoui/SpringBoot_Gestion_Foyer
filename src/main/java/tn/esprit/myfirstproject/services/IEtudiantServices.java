@@ -2,6 +2,7 @@ package tn.esprit.myfirstproject.services;
 
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.myfirstproject.entities.Etudiant;
+import tn.esprit.myfirstproject.entities.TypeChambre;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface IEtudiantServices {
 
     public Etudiant updatePassword (Long idEtudiant, String  password);
     public Etudiant updateImage (Long idEtudiant, MultipartFile file) throws IOException;
+
+    List<Long> cinEtudiantReservationByTypeC(TypeChambre typeC);
 }

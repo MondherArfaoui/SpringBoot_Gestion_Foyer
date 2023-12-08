@@ -77,6 +77,11 @@ public class IFoyerServicesImp implements IFoyerServices {
     }
 
     @Override
+    public List<Foyer> getFoyersWithoutUniversite() {
+        return foyerRepository.findByUniversiteIsNull();
+    }
+
+    @Override
     public Foyer getFoyerById(Long idFoyer) {
         return foyerRepository.findById(idFoyer).orElse(null);
     }
@@ -86,6 +91,15 @@ public class IFoyerServicesImp implements IFoyerServices {
         Etudiant etudiant = etudiantRepository.findById(idEtudiant).orElse(null);
 
         Universite universite = etudiant.getUniversite();
+
+        Foyer foyer = universite.getFoyer();
+
+        return foyer;
+    }
+
+    @Override
+    public Foyer getFoyerByIdUniversite(Long idUniversite) {
+        Universite universite = universiteRepository.findById(idUniversite).orElse(null);
 
         Foyer foyer = universite.getFoyer();
 
